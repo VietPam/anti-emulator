@@ -5,7 +5,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.view.Menu;
+import android.graphics.PorterDuff;
+import android.graphics.Color;
 import diff.strazzere.anti.debugger.FindDebugger;
 import diff.strazzere.anti.emulator.FindEmulator;
 import diff.strazzere.anti.monkey.FindMonkey;
@@ -14,6 +17,7 @@ import diff.strazzere.anti.taint.FindTaint;
 public class MainActivity extends Activity {
 
     private TextView outputText;
+    private ImageView resultIcon;
     private StringBuilder outputBuffer = new StringBuilder();
 
     @Override
@@ -22,6 +26,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         outputText = findViewById(R.id.outputText);
+        resultIcon = findViewById(R.id.resultIcon);
 
         new Thread() {
             @Override
@@ -31,12 +36,24 @@ public class MainActivity extends Activity {
                 isTaintTrackingDetected();
                 isMonkeyDetected();
                 isDebugged();
-                isQEmuEnvDetected();
+                boolean emulatorDetected = isQEmuEnvDetected();
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         outputText.setText(outputBuffer.toString());
+
+                        if (emulatorDetected) {
+                            // Error State (Red)
+                            resultIcon.setImageResource(android.R.drawable.ic_delete); // Or a custom 'X' vector
+                            resultIcon.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                            resultIcon.getBackground().setColorFilter(Color.parseColor("#FFEBEE"), PorterDuff.Mode.SRC_IN);
+                        } else {
+                            // Clean State (Green)
+                            resultIcon.setImageResource(R.drawable.ic_check_green);
+                            resultIcon.setColorFilter(Color.parseColor("#4CAF50"), PorterDuff.Mode.SRC_IN);
+                            resultIcon.getBackground().setColorFilter(Color.parseColor("#E8F5E9"), PorterDuff.Mode.SRC_IN);
+                        }
                     }
                 });
             }

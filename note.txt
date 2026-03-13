@@ -1,0 +1,14 @@
+scrcpy --version // this package is screen copy to screen minor
+
+scrcpy // to screen minor
+
+vietpq@vietpq-GF63-Thin-11SC:~/Documents/anti-emulator$ scrcpy
+scrcpy 1.25 <https://github.com/Genymobile/scrcpy>
+ERROR: Multiple (2) ADB devices:
+ERROR:     -->   (usb)  16ddd2397d84                    device  24075RP89G
+ERROR:     --> (tcpip)  emulator-5554                   device  Android_SDK_built_for_x86
+ERROR: Select a device via -s (--serial), -d (--select-usb) or -e (--select-tcpip)
+ERROR: Server connection failed
+vietpq@vietpq-GF63-Thin-11SC:~/Documents/anti-emulator$ scrcpy -s 16ddd2397d84
+
+done
